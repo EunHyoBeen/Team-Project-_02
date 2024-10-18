@@ -2,19 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public partial class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public GameObject RestartBtn;
+    public GameObject CanvasImage;
     public GameObject Rain;
 
     float time = 0f;
     
     [SerializeField] private TMP_Text CurrentTimeText;
     [SerializeField] private TMP_Text BestTimeText;
+    [SerializeField] private TMP_Text TimeTxt;
+
+    bool isPlay = true;
+
+    string key = "BestTimeText";
 
     private void Awake()
     {
@@ -27,15 +33,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1f;
         InvokeRepeating("MakeRain", 0f, 0.1f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
-        CurrentTimeText.text = time.ToString("N2");
-        
+        if (isPlay)
+        {
+            time += Time.deltaTime;
+            TimeTxt.text = time.ToString("N2");
+        }
     }
     
     void MakeRain()
@@ -45,8 +54,31 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        isPlay = false;
         Time.timeScale = 0f;
-        RestartBtn.SetActive(true);
+        CurrentTimeText.text = time.ToString("N2");
+
+        if (PlayerPrefs.HasKey(key))
+        {
+            float best = PlayerPrefs.GetFloat(key);
+            if(best < time)
+            {
+                PlayerPrefs.SetFloat(key, time);
+                BestTimeText.text = time.ToString("N2");
+            }
+            else
+            {
+                BestTimeText.text = best.ToString("N2");
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetFloat(key, time);
+            BestTimeText.text = time.ToString("N2");
+        }
+        CanvasImage.SetActive(true);
+
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
