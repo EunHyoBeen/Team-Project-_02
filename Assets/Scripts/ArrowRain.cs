@@ -7,7 +7,9 @@ public class ArrowRain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        float x = Random.Range(-2.4f, 2.4f);
+        float y = Random.Range(3.0f, 5.0f);
+        transform.position = new Vector3(x, y, 0);
     }
 
     // Update is called once per frame
@@ -21,6 +23,11 @@ public class ArrowRain : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             Destroy(gameObject);
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+            GameManager.instance.GameOver();
         }
     }
 }
