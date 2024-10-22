@@ -12,11 +12,13 @@ public partial class GameManager : MonoBehaviour
     public GameObject CanvasImage;
     public GameObject Rain;
 
+    
+
     float time = 0f;
     
     [SerializeField] private TMP_Text CurrentTimeText;
     [SerializeField] private TMP_Text BestTimeText;
-    [SerializeField] private TMP_Text TimeTxt;
+    [SerializeField] private TMP_Text TimeText;
 
     bool isPlay = true;
 
@@ -28,6 +30,7 @@ public partial class GameManager : MonoBehaviour
         {
             instance = this;
         }
+        
     }
 
     // Start is called before the first frame update
@@ -43,7 +46,7 @@ public partial class GameManager : MonoBehaviour
         if (isPlay)
         {
             time += Time.deltaTime;
-            TimeTxt.text = time.ToString("N2");
+            TimeText.text = time.ToString("N2");
         }
     }
     
@@ -76,6 +79,7 @@ public partial class GameManager : MonoBehaviour
             PlayerPrefs.SetFloat(key, time);
             BestTimeText.text = time.ToString("N2");
         }
+        
         CanvasImage.SetActive(true);
 
         
